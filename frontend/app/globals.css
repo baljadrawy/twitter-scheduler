@@ -1,4 +1,4 @@
-```css
+css
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -31,6 +31,4 @@ body {
 .animate-slide-in {
   animation: slide-in 0.3s ease-out;
 }
-```
 
----

@@ -1,4 +1,4 @@
-```typescript
+
 import Bull from 'bull';
 import { TwitterApi } from 'twitter-api-v2';
 import { pool } from '../config/database';
@@ -46,6 +46,4 @@ tweetQueue.process('publish-tweet', async (job) => {
 });
 
 console.log('🔄 Tweet worker running...');
-```
 
----

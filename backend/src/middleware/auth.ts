@@ -1,4 +1,3 @@
-```typescript
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
@@ -20,6 +19,3 @@ export const authenticateUser = (req: AuthRequest, res: Response, next: NextFunc
     return res.status(401).json({ success: false, error: 'Invalid token' });
   }
 };
-```
-
----

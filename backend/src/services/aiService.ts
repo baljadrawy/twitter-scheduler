@@ -1,4 +1,3 @@
-```typescript
 import OpenAI from 'openai';
 import { pool } from '../config/database';
 
@@ -59,6 +58,3 @@ export class AIService {
 }
 
 export const aiService = new AIService();
-```
-
----

@@ -1,4 +1,4 @@
-```typescript
+
 export interface User {
   id: string;
   email: string;
@@ -29,6 +29,4 @@ export interface ScheduledTweet {
 export interface AIActionType {
   type: 'generate' | 'improve' | 'rephrase' | 'hashtags';
 }
-```
 
----

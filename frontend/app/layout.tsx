@@ -1,4 +1,3 @@
-
 import './globals.css'
 import type { Metadata } from 'next'
 
@@ -13,9 +12,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    
-      {children}
-    
+    <html lang="ar" dir="rtl">
+      <body>{children}</body>
+    </html>
   )
 }
 

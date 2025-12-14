@@ -1,4 +1,3 @@
-```typescript
 import { Pool } from 'pg';
 import dotenv from 'dotenv';
 
@@ -19,6 +18,3 @@ pool.on('error', (err) => {
 });
 
 export default pool;
-```
-
----

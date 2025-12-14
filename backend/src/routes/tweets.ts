@@ -1,4 +1,3 @@
-```typescript
 import express from 'express';
 import { authenticateUser, AuthRequest } from '../middleware/auth';
 import { pool } from '../config/database';
@@ -39,6 +38,3 @@ router.get('/', authenticateUser, async (req: AuthRequest, res) => {
 });
 
 export default router;
-```
-
----

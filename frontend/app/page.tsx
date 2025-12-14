@@ -264,4 +264,54 @@ export default function TwitterScheduler() {
 
             <div className="grid grid-cols-4 gap-6 mb-6">
               <div className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white'} rounded-xl p-6 border`}><div className="bg-blue-100 text-blue-600 w-12 h-12 rounded-xl flex items-center justify-center mb-4"><Send size={24} /></div><p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>مجدولة</p><p className={`text-3xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{pendingCount}</p></div>
-    
+              <div className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white'} rounded-xl p-6 border`}><div className="bg-green-100 text-green-600 w-12 h-12 rounded-xl flex items-center justify-center mb-4"><Check size={24} /></div><p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>منشورة</p><p className={`text-3xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{publishedCount}</p></div>
+              <div className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white'} rounded-xl p-6 border`}><div className="bg-purple-100 text-purple-600 w-12 h-12 rounded-xl flex items-center justify-center mb-4"><BarChart3 size={24} /></div><p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>معدل التفاعل</p><p className={`text-3xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>8.5%</p></div>
+              <div className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white'} rounded-xl p-6 border`}><div className="bg-orange-100 text-orange-600 w-12 h-12 rounded-xl flex items-center justify-center mb-4"><Sparkles size={24} /></div><p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>استخدام AI</p><p className={`text-3xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{aiUsage.generate + aiUsage.improve + aiUsage.hashtags}</p></div>
+            </div>
+
+            <div className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white'} rounded-xl p-6 border`}>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>📅 التغريدات</h2>
+                <div className="flex gap-2">
+                  <button onClick={() => setFilterStatus('all')} className={`px-3 py-1.5 rounded-lg text-sm font-medium ${filterStatus === 'all' ? 'bg-blue-100 text-blue-600' : darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'}`}>الكل ({tweets.length})</button>
+                  <button onClick={() => setFilterStatus('pending')} className={`px-3 py-1.5 rounded-lg text-sm font-medium ${filterStatus === 'pending' ? 'bg-yellow-100 text-yellow-600' : darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'}`}>مجدولة ({pendingCount})</button>
+                  <button onClick={() => setFilterStatus('published')} className={`px-3 py-1.5 rounded-lg text-sm font-medium ${filterStatus === 'published' ? 'bg-green-100 text-green-600' : darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'}`}>منشورة ({publishedCount})</button>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                {filteredTweets.map(tweet => (
+                  <div key={tweet.id} className={`${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-gray-50 border-gray-200'} border rounded-xl p-5 hover:shadow-lg transition`}>
+                    <div className="flex justify-between mb-3">
+                      <div className="flex-1">
+                        <p className={`${darkMode ? 'text-gray-100' : 'text-gray-900'} leading-relaxed mb-2`}>{tweet.content}</p>
+                        {tweet.hasMedia && <span className="px-2 py-1 bg-blue-100 text-blue-600 rounded text-xs flex items-center gap-1 inline-flex"><Image size={12} />صورة</span>}
+                      </div>
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium ml-4 h-fit ${tweet.status === 'pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'}`}>{tweet.status === 'pending' ? '⏳ قيد الانتظار' : '✅ منشور'}</span>
+                    </div>
+                    <div className={`flex items-center gap-4 text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'} mb-3`}>
+                      <span className="flex items-center gap-1"><Clock size={14} />{tweet.time}</span>
+                      <span className="flex items-center gap-1"><Globe size={14} />{tweet.location}</span>
+                    </div>
+                    {tweet.status === 'published' && (
+                      <div className={`flex gap-6 pt-3 border-t ${darkMode ? 'border-gray-600' : 'border-gray-200'} text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                        <span className="flex items-center gap-1.5 font-medium"><Eye size={14} />{tweet.impressions.toLocaleString()}</span>
+                        <span className="font-medium">❤️ {tweet.likes}</span>
+                        <span className="font-medium">🔁 {tweet.retweets}</span>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {showCreateModal && <CreateTweetModal />}
+      </div>
+    );
+  };
+
+  if (currentPage === 'login') return <LoginPage />;
+  return <Dashboard />;
+}

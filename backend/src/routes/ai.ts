@@ -1,5 +1,3 @@
-
-```typescript
 import express from 'express';
 import { authenticateUser, AuthRequest } from '../middleware/auth';
 import { aiService } from '../services/aiService';
@@ -37,6 +35,3 @@ router.post('/hashtags', authenticateUser, async (req: AuthRequest, res) => {
 });
 
 export default router;
-```
-
----

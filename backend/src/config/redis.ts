@@ -1,4 +1,3 @@
-```typescript
 import Redis from 'ioredis';
 import dotenv from 'dotenv';
 
@@ -15,6 +14,3 @@ redis.on('error', (err) => {
 });
 
 export default redis;
-```
-
----

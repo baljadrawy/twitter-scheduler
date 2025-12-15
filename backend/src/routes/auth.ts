@@ -6,7 +6,6 @@ import { z } from 'zod';
 
 const router = express.Router();
 
-// تحسين: رسائل خطأ عربية واضحة
 const registerSchema = z.object({
   email: z.string().email({ message: "بريد إلكتروني غير صالح" }),
   password: z.string().min(6, { message: "كلمة المرور يجب أن تكون 6 أحرف على الأقل" }),
@@ -39,7 +38,6 @@ router.post('/register', async (req, res) => {
     res.status(201).json({ success: true, data: { user, token } });
 
   } catch (error) {
-    // ✅ تحسين: فصل أخطاء Zod عن أخطاء السيرفر
     if (error instanceof z.ZodError) {
       return res.status(400).json({ success: false, error: error.errors[0].message });
     }
@@ -50,12 +48,10 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
   try {
-    // ✅ تحسين: التحقق من المدخلات في تسجيل الدخول أيضاً
     const { email, password } = loginSchema.parse(req.body);
 
     const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
     
-    // رسالة موحدة للأمان
     const invalidMsg = 'البريد الإلكتروني أو كلمة المرور غير صحيحة';
 
     if (result.rows.length === 0) return res.status(401).json({ success: false, error: invalidMsg });

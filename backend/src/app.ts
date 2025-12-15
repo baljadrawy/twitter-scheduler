@@ -7,13 +7,14 @@ import aiRoutes from './routes/ai';
 import twitterAuthRoutes from './routes/twitterAuth'; // تأكد من إنشاء هذا الملف
 import { errorHandler } from './middleware/errorHandler';
 import './workers/tweetWorker'; // 🔥 تشغيل الـ Worker
+import twitterAuthRoutes from './routes/twitterAuth';
 
 dotenv.config();
 const app = express();
 
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
-
+app.use('/api', twitterAuthRoutes); // سيصبح الرابط: /api/auth/twitter/link
 app.use('/api/auth', authRoutes);
 app.use('/api/tweets', tweetRoutes); // لاحظ: المسار tweets
 app.use('/api/ai', aiRoutes);

@@ -1,20 +1,17 @@
 import { Pool } from 'pg';
 import dotenv from 'dotenv';
-
 dotenv.config();
 
-export const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
-});
+if (!process.env.DATABASE_URL) throw new Error('DATABASE_URL missing');
 
-pool.on('connect', () => {
-  console.log('✅ Connected to PostgreSQL');
-});
+declare global { var postgres: Pool | undefined; }
 
-pool.on('error', (err) => {
-  console.error('❌ PostgreSQL error:', err);
-  process.exit(-1);
-});
+let pool: Pool;
+if (process.env.NODE_ENV === 'production') {
+  pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
+} else {
+  if (!global.postgres) global.postgres = new Pool({ connectionString: process.env.DATABASE_URL });
+  pool = global.postgres;
+}
 
-export default pool;
+export { pool };

@@ -1,16 +1,21 @@
 import express from 'express';
 import { authenticateUser, AuthRequest } from '../middleware/auth';
-import { aiService } from '../services/aiService';
+// تأكد من وجود هذا الملف أو سنقوم بإنشائه
+import { aiService } from '../services/aiService'; 
 
 const router = express.Router();
 
 router.post('/generate', authenticateUser, async (req: AuthRequest, res) => {
   try {
     const { prompt, tone, length } = req.body;
+    
+    // نستدعي الخدمة لتوليد النص
     const tweet = await aiService.generateTweet(req.user!.id, prompt, tone, length);
+    
     res.json({ success: true, data: { tweet } });
   } catch (error) {
-    res.status(500).json({ success: false, error: 'AI generation failed' });
+    console.error('AI Generate Error:', error);
+    res.status(500).json({ success: false, error: 'فشل توليد التغريدة' });
   }
 });
 
@@ -20,7 +25,8 @@ router.post('/improve', authenticateUser, async (req: AuthRequest, res) => {
     const variations = await aiService.improveTweet(req.user!.id, content, options);
     res.json({ success: true, data: { variations } });
   } catch (error) {
-    res.status(500).json({ success: false, error: 'AI improvement failed' });
+    console.error('AI Improve Error:', error);
+    res.status(500).json({ success: false, error: 'فشل تحسين النص' });
   }
 });
 
@@ -30,7 +36,8 @@ router.post('/hashtags', authenticateUser, async (req: AuthRequest, res) => {
     const hashtags = await aiService.generateHashtags(req.user!.id, content, count);
     res.json({ success: true, data: { hashtags } });
   } catch (error) {
-    res.status(500).json({ success: false, error: 'Hashtag generation failed' });
+    console.error('AI Hashtags Error:', error);
+    res.status(500).json({ success: false, error: 'فشل توليد الهاشتاقات' });
   }
 });
 

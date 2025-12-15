@@ -1,44 +1,48 @@
 # Twitter Scheduler
 
 ## Overview
-A Twitter scheduling application with AI-powered tweet generation. Built with Next.js frontend and Express.js backend.
+A Twitter scheduling application with AI-powered tweet generation. Built with Next.js frontend with integrated API routes.
 
 ## Architecture
-- **Frontend**: Next.js 14 with React 18, Tailwind CSS
-- **Backend**: Express.js with TypeScript (currently not running - requires Redis)
+- **Frontend & API**: Next.js 14 with React 18, Tailwind CSS, and API Routes
 - **Database**: PostgreSQL (Replit-provided)
-- **Queue**: Bull/Redis (optional - for tweet scheduling)
+- **Authentication**: JWT-based with bcryptjs password hashing
 
 ## Project Structure
 ```
 /
 ├── frontend/          # Next.js application
-│   ├── app/          # App router pages
+│   ├── app/
+│   │   ├── api/      # API routes for auth
+│   │   │   └── auth/ # Login and register endpoints
+│   │   ├── globals.css
+│   │   ├── layout.tsx
+│   │   └── page.tsx
 │   ├── next.config.js
 │   └── package.json
-├── backend/          # Express.js API server
-│   ├── src/
-│   │   ├── config/   # Database and Redis config
-│   │   ├── routes/   # API routes
-│   │   ├── services/ # Business logic
-│   │   └── workers/  # Background job workers
-│   └── package.json
-└── database/         # SQL schema
-    └── schema.sql
+├── backend/          # Express.js API server (not used in Replit)
+├── database/         # SQL schema
+│   └── schema.sql
+└── replit.md
 ```
 
 ## Running the Project
 - **Frontend**: Runs on port 5000 via workflow
-- **Backend**: Uses port 3001 (optional, requires API keys)
+- **API Routes**: Integrated in Next.js at `/api/*`
+
+## API Endpoints
+- `POST /api/auth/register` - User registration
+- `POST /api/auth/login` - User login
 
 ## Database Schema
 11 tables for users, twitter accounts, scheduled tweets, threads, analytics, etc.
 
-## External APIs Required
+## External APIs (Optional)
 - Twitter API (for posting tweets)
 - OpenAI API (for AI tweet generation)
 - Cloudinary (for media storage)
 
 ## Notes
-- Frontend runs in demo mode without backend
-- Redis is optional - backend gracefully handles missing Redis
+- Registration and login save to PostgreSQL database
+- JWT tokens used for authentication
+- Password hashing with bcryptjs

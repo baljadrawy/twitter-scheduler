@@ -32,19 +32,51 @@ export default function TwitterScheduler() {
     const [isLogin, setIsLogin] = useState(true);
     const [formData, setFormData] = useState({ email: '', password: '', name: '' });
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
-    const handleAuth = () => {
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || '/api';
+
+    const handleAuth = async () => {
       if (!formData.email || !formData.password) return;
+      if (!isLogin && !formData.name) {
+        setError('الرجاء إدخال الاسم');
+        return;
+      }
+      
       setLoading(true);
-      setTimeout(() => {
-        setUser({ 
-          name: formData.name || formData.email.split('@')[0], 
-          email: formData.email,
-          avatar: (formData.name || 'U').charAt(0).toUpperCase()
+      setError('');
+      
+      try {
+        const endpoint = isLogin ? '/auth/login' : '/auth/register';
+        const body = isLogin 
+          ? { email: formData.email, password: formData.password }
+          : { email: formData.email, password: formData.password, name: formData.name };
+        
+        const response = await fetch(`${API_URL}${endpoint}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
         });
-        setCurrentPage('dashboard');
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          localStorage.setItem('token', data.data.token);
+          setUser({ 
+            id: data.data.user.id,
+            name: data.data.user.name, 
+            email: data.data.user.email,
+            avatar: data.data.user.name.charAt(0).toUpperCase()
+          });
+          setCurrentPage('dashboard');
+        } else {
+          setError(data.error || 'حدث خطأ أثناء المعالجة');
+        }
+      } catch (err) {
+        setError('تعذر الاتصال بالخادم');
+      } finally {
         setLoading(false);
-      }, 1000);
+      }
     };
 
     return (
@@ -85,9 +117,11 @@ export default function TwitterScheduler() {
             </button>
           </div>
 
-          <div className="mt-6 p-4 bg-blue-50 rounded-xl border border-blue-200">
-            <p className="text-sm text-blue-800 text-center">💡 <strong>Demo:</strong> استخدم أي بريد وكلمة مرور</p>
-          </div>
+          {error && (
+            <div className="mt-4 p-4 bg-red-50 rounded-xl border border-red-200">
+              <p className="text-sm text-red-800 text-center">{error}</p>
+            </div>
+          )}
         </div>
       </div>
     );
